@@ -1,0 +1,82 @@
+package piyush;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class TicTacToe {
+
+    public static void main(String[] args) {
+
+        char[][] arr = new char[3][3];
+        Scanner input = new Scanner(System.in);
+        char player = 'x';
+        int runs = 0;
+        print(arr);
+
+        while (true) {
+
+            int row = input.nextInt();
+            int col = input.nextInt();
+
+            if(runs>=9) return;
+
+            // Validate input range
+            if (row < 0 || row > 2 || col < 0 || col > 2) {
+                System.out.println("Invalid position! Please enter values between 0 and 2.");
+                continue;
+            }
+
+            // Check if cell is already taken
+            if (arr[row][col] == 'x' || arr[row][col] == 'o') {
+                System.out.println("Invalid input! Cell already filled.");
+                continue;
+            }
+
+            // Place the current player's move
+            arr[row][col] = player;
+
+            // Print board
+            print(arr);
+
+            // Check after placing the move
+            if (check(arr, player)) {
+                System.out.println(player + " wins this game!");
+                break;
+            }
+
+            player = (player == 'x') ? 'o' : 'x';
+            runs++;
+        }
+        input.close();
+    }
+
+    static boolean check(char[][] arr, char player) {
+        int[][][] conditions = {
+                {{0, 0}, {0, 1}, {0, 2}},
+                {{1, 0}, {1, 1}, {1, 2}},
+                {{2, 0}, {2, 1}, {2, 2}},
+                {{0, 0}, {1, 0}, {2, 0}},
+                {{0, 1}, {1, 1}, {2, 1}},
+                {{0, 2}, {1, 2}, {2, 2}},
+                {{0, 0}, {1, 1}, {2, 2}},
+                {{0, 2}, {1, 1}, {2, 0}}
+        };
+
+        for (int[][] line : conditions) {
+            int count = 0;
+            for (int[] cell : line) {
+                if (arr[cell[0]][cell[1]] == player) {
+                    count++;
+                }
+            }
+            if (count == 3) return true;
+        }
+        return false;
+    }
+
+    static void print(char[][] board) {
+        for (char[] row : board) {
+            System.out.println(Arrays.toString(row));
+        }
+    }
+}
